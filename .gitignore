@@ -11,7 +11,6 @@ __pycache__/
 # Distribution / packaging
 .Python
 env/
-<<<<<<< Updated upstream
 bin/
 build/
 develop-eggs/
@@ -59,3 +58,7 @@ docs/_build/
 # Sublime text project files
 *.sublime-project
 *.sublime-workspace
+
+# CTags
+.tags*
+tags
