@@ -9,7 +9,7 @@ class LogFile(object):
 
     def open(self, create=False):
         try:
-            return open(self.path, 'w')
+            return open(self.path, 'a')
         except IOError:
             if create:
                 return open(self.path, 'w+')
@@ -37,7 +37,7 @@ def hello(message):
     time = time.strftime("%Y-%m-%d %H:%M")
     string = ': '.join((time, message))
 
-    log_file.write(file, string)
+    log_file.write(file, (string + '\n'))
     click.echo(message=string)
 
 
