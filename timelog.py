@@ -29,7 +29,7 @@ class LogFile(object):
 def hello(message):
     """Simple program for registering jobs at points of time"""
     log_file = LogFile()
-    file_path = os.path.expanduser('~') + "/.timelog"
+    file_path = os.path.expanduser('~') + "/.timelog/timelog"
     log_file.path = file_path
     file = log_file.open(create=True)
 
