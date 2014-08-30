@@ -21,6 +21,27 @@ class LogFile(object):
             file = self.open(create=True)
             file.write(message)
 
+    def is_another_day(self, date):
+        """
+        Checks if new message is written in the next day,
+        than the last log entry.
+
+        date - message date
+        """
+        try:
+            f = open(self.path, 'rb')
+            last_line = f.readlines()[-1]
+        except (IOError, IndexError):
+            return False
+
+        last_log_date = last_line[:10]
+
+        # if message date is other day than last log entry
+        if date[:10] != last_log_date:
+            return True
+        else:
+            return False
+
 
 @click.command()
 @click.option('--message',
@@ -37,7 +58,14 @@ def message(message):
     time = time.strftime("%Y-%m-%d %H:%M")
     string = ': '.join((time, message))
 
-    log_file.write(file, (string + '\n'))
+    is_another_day = log_file.is_another_day(time)
+
+    # make empty line between different dates in log.
+    if is_another_day:
+        log_file.write(file, ('\n' + string + '\n'))
+    else:
+        log_file.write(file, (string + '\n'))
+
     click.echo(message=string)
 
 
