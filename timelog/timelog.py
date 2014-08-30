@@ -26,7 +26,7 @@ class LogFile(object):
 @click.option('--message',
               prompt="Your log message",
               help="Your work that you've been doing until now")
-def hello(message):
+def message(message):
     """Simple program for registering jobs at points of time"""
     log_file = LogFile()
     file_path = os.path.expanduser('~') + "/.timelog/timelog"
@@ -42,4 +42,4 @@ def hello(message):
 
 
 if __name__ == "__main__":
-    hello()
+    message()
