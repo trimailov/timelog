@@ -4,7 +4,7 @@ import os
 
 
 class LogFile(object):
-    def __init__(self, path=None):
+    def __init__(self, path=os.path.expanduser('~') + "/.timeflow"):
         self.path = path
 
     def open(self, create=False):
@@ -44,14 +44,12 @@ class LogFile(object):
 
 
 @click.command()
-@click.option('--message',
+@click.option('--message', '-m',
               prompt="Your log message",
               help="Your work that you've been doing until now")
 def message(message):
     """Simple program for registering jobs at points of time"""
     log_file = LogFile()
-    file_path = os.path.expanduser('~') + "/.timelog/timelog"
-    log_file.path = file_path
     file = log_file.open(create=True)
 
     time = datetime.datetime.now()
