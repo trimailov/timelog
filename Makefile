@@ -7,4 +7,7 @@ env/bin/python:
 clean:
 	rm -rf env
 
-.PHONY: clean
+tags:
+	ctags -R
+
+.PHONY: clean tags
