@@ -11,12 +11,8 @@ class LogFile(object):
     def open(self):
         return open(self.path, 'a')
 
-    def write(self, file, message):
-        try:
-            file.write(message)
-        except IOError:
-            file = self.open()
-            file.write(message)
+    def read(self):
+        return open(self.path, 'r')
 
     def is_another_day(self, date):
         """
@@ -57,9 +53,9 @@ def message(message):
 
     # make empty line between different dates in log.
     if is_another_day:
-        log_file.write(file, ('\n' + string + '\n'))
+        file.write('\n' + string + '\n')
     else:
-        log_file.write(file, (string + '\n'))
+        file.write(string + '\n')
 
     click.echo(message=string)
 
