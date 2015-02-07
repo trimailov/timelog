@@ -36,6 +36,11 @@ class LogFile(object):
             return False
 
 
+def get_time_now():
+    time = datetime.datetime.now()
+    return time.strftime("%Y-%m-%d %H:%M")
+
+
 @click.command()
 @click.option('--message', '-m',
               prompt="Your log message",
@@ -45,8 +50,7 @@ def message(message):
     log_file = LogFile()
     file = log_file.open()
 
-    time = datetime.datetime.now()
-    time = time.strftime("%Y-%m-%d %H:%M")
+    time = get_time_now()
     string = ': '.join((time, message))
 
     is_another_day = log_file.is_another_day(time)
