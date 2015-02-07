@@ -1,24 +1,21 @@
-import click
 import datetime
 import os
+
+import click
 
 
 class LogFile(object):
     def __init__(self, path=os.path.expanduser('~') + "/.timeflow"):
         self.path = path
 
-    def open(self, create=False):
-        try:
-            return open(self.path, 'a')
-        except IOError:
-            if create:
-                return open(self.path, 'w+')
+    def open(self):
+        return open(self.path, 'a')
 
     def write(self, file, message):
         try:
             file.write(message)
         except IOError:
-            file = self.open(create=True)
+            file = self.open()
             file.write(message)
 
     def is_another_day(self, date):
@@ -50,7 +47,7 @@ class LogFile(object):
 def message(message):
     """Simple program for registering jobs at points of time"""
     log_file = LogFile()
-    file = log_file.open(create=True)
+    file = log_file.open()
 
     time = datetime.datetime.now()
     time = time.strftime("%Y-%m-%d %H:%M")
