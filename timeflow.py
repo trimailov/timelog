@@ -1,5 +1,6 @@
 import datetime
 import os
+import subprocess
 
 import click
 
@@ -65,7 +66,7 @@ def cli():
 @cli.command()
 @click.argument('message')
 def log(message):
-    """Simple program for registering jobs at points of time"""
+    """Simple command for registering jobs"""
     log_file = LogFile()
     file = log_file.open()
 
@@ -76,5 +77,10 @@ def log(message):
     click.echo(message=log_entry[:-1])
 
 
-if __name__ == "__main__":
-    message()
+@cli.command()
+@click.option('--editor', '-e',
+              envvar='EDITOR',
+              help='Define editor for timeflow log file editing.')
+def edit(editor):
+    """Edit timeflow log file"""
+    subprocess.call([editor, LOG_FILE])
