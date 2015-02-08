@@ -4,8 +4,11 @@ import os
 import click
 
 
+LOG_FILE = os.path.expanduser('~') + "/.timeflow"
+
+
 class LogFile(object):
-    def __init__(self, path=os.path.expanduser('~') + "/.timeflow"):
+    def __init__(self, path=LOG_FILE):
         self.path = path
 
     def open(self):
