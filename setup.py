@@ -9,6 +9,6 @@ setup(
     ],
     entry_points='''
         [console_scripts]
-        timeflow=timeflow:message
+        timeflow=timeflow:cli
     ''',
 )

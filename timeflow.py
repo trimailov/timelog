@@ -57,11 +57,14 @@ def get_log_entry(log_file, message):
     return log_message
 
 
-@click.command()
-@click.option('--message', '-m',
-              prompt="Your log message",
-              help="Your work that you've been doing until now")
-def message(message):
+@click.group()
+def cli():
+    pass
+
+
+@cli.command()
+@click.argument('message')
+def log(message):
     """Simple program for registering jobs at points of time"""
     log_file = LogFile()
     file = log_file.open()
