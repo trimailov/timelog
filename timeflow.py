@@ -40,6 +40,19 @@ def get_time_now():
     time = datetime.datetime.now()
     return time.strftime("%Y-%m-%d %H:%M")
 
+def get_log_entry(log_file, message):
+    time = get_time_now()
+    string = ': '.join((time, message))
+
+    is_another_day = log_file.is_another_day(time)
+
+    # make empty line between different dates in log.
+    if is_another_day:
+        log_message = '\n' + string + '\n'
+    else:
+        log_message = string + '\n'
+    return log_message
+
 
 @click.command()
 @click.option('--message', '-m',
@@ -50,18 +63,11 @@ def message(message):
     log_file = LogFile()
     file = log_file.open()
 
-    time = get_time_now()
-    string = ': '.join((time, message))
+    log_entry = get_log_entry(log_file, message)
+    file.write(log_entry)
 
-    is_another_day = log_file.is_another_day(time)
-
-    # make empty line between different dates in log.
-    if is_another_day:
-        file.write('\n' + string + '\n')
-    else:
-        file.write(string + '\n')
-
-    click.echo(message=string)
+    # echo back full log entry, without the new line char at the end
+    click.echo(message=log_entry[:-1])
 
 
 if __name__ == "__main__":
