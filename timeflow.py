@@ -1,4 +1,4 @@
-import datetime
+from datetime import datetime
 import os
 import subprocess
 
@@ -6,52 +6,44 @@ import click
 
 
 LOG_FILE = os.path.expanduser('~') + "/.timeflow"
+DATE_FORMAT = "%Y-%m-%d %H:%M"
 
 
-class LogFile(object):
-    def __init__(self, path=LOG_FILE):
-        self.path = path
+def is_another_day(date):
+    """
+    Checks if new message is written in the next day,
+    than the last log entry.
 
-    def open(self):
-        return open(self.path, 'a')
+    date - message date
+    """
+    try:
+        f = open(LOG_FILE, 'rb')
+        last_line = f.readlines()[-1]
+    except (IOError, IndexError):
+        return False
 
-    def read(self):
-        return open(self.path, 'r')
+    last_log_date = last_line[:10]
 
-    def is_another_day(self, date):
-        """
-        Checks if new message is written in the next day,
-        than the last log entry.
-
-        date - message date
-        """
-        try:
-            f = open(self.path, 'rb')
-            last_line = f.readlines()[-1]
-        except (IOError, IndexError):
-            return False
-
-        last_log_date = last_line[:10]
-
-        # if message date is other day than last log entry
-        if date[:10] != last_log_date:
-            return True
-        else:
-            return False
+    # if message date is other day than last log entry
+    if date[:10] != last_log_date:
+        return True
+    else:
+        return False
 
 
 def get_time_now():
-    time = datetime.datetime.now()
-    return time.strftime("%Y-%m-%d %H:%M")
+    time = datetime.now()
+    return time.strftime(DATE_FORMAT)
 
-def get_log_entry(log_file, message):
+
+def get_log_entry(message):
     time = get_time_now()
     string = ': '.join((time, message))
 
-    is_another_day = log_file.is_another_day(time)
+    another_day = is_another_day(time)
 
     # make empty line between different dates in log.
-    if is_another_day:
+    if another_day:
         log_message = '\n' + string + '\n'
     else:
         log_message = string + '\n'
@@ -67,10 +59,9 @@ def cli():
 @click.argument('message')
 def log(message):
     """Simple command for registering jobs"""
-    log_file = LogFile()
-    file = log_file.open()
+    file = open(LOG_FILE, 'a')
 
-    log_entry = get_log_entry(log_file, message)
+    log_entry = get_log_entry(message)
     file.write(log_entry)
 
     # echo back full log entry, without the new line char at the end
