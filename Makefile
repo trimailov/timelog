@@ -7,9 +7,6 @@ env/bin/python:
 test:
 	env/bin/python tests.py
 
-clean_test:
-	rm -f timeflow_test
-
 clean:
 	rm -rf env tags
 
