@@ -7,7 +7,14 @@ import timeflow
 
 
 class TestLogging(unittest.TestCase):
+    def tearDown(self):
+        os.remove(self.test_file)
+
     def test_log(self):
+        test_dir_path = os.path.dirname(os.path.abspath(__file__))
+        self.test_file = os.path.join(test_dir_path, 'timeflow_test')
+        timeflow.LOG_FILE = self.test_file
+
         message = 'Arrived.'
         time = timeflow.get_time_now()
 
