@@ -7,8 +7,17 @@ env/bin/python:
 test:
 	env/bin/python tests.py
 
+coverage:
+	rm -rf htmlcov/ .coverage
+	env/bin/coverage run --omit='env/*' tests.py
+	coverage report -m
+	coverage html
+
+show_coverage:
+	open htmlcov/index.html
+
 clean:
-	rm -rf env tags
+	rm -rf env tags htmlcov .coverage timeflow.egg-info
 
 tags:
 	ctags -R
