@@ -8,6 +8,10 @@ import click
 LOG_FILE = os.path.expanduser('~') + "/.timeflow"
 DATE_FORMAT = "%Y-%m-%d %H:%M"
 
+# Constants for stripping log entry strings to get date or datetime strings
+DATE_LEN = 10
+DATE_TIME_LEN = 16
+
 
 def is_another_day(date):
     """
@@ -22,10 +26,10 @@ def is_another_day(date):
     except (IOError, IndexError):
         return False
 
-    last_log_date = last_line[:10]
+    last_log_date = last_line[:DATE_LEN]
 
     # if message date is other day than last log entry
-    if date[:10] != last_log_date:
+    if date[:DATE_LEN] != last_log_date:
         return True
     else:
         return False
@@ -82,7 +86,7 @@ def find_date_line(lines, date_to_find, reverse=False):
     if reverse:
         lines = reversed(lines)
     for i, line in enumerate(lines):
-        date = line[:10]
+        date = line[:DATE_LEN]
         if date == date_to_find:
             if reverse:
                 return len_lines - i
