@@ -75,3 +75,26 @@ def log(message):
 def edit(editor):
     """Edit timeflow log file"""
     subprocess.call([editor, LOG_FILE])
+
+
+def find_date_line(lines, date_to_find, reverse=False):
+    len_lines = len(lines) - 1
+    if reverse:
+        lines = reversed(lines)
+    for i, line in enumerate(lines):
+        date = line[:10]
+        if date == date_to_find:
+            if reverse:
+                return len_lines - i
+            else:
+                return i
+
+
+def date_begins(lines, date_to_find):
+    "Returns first line out of lines, with date_to_find"
+    return find_date_line(lines, date_to_find)
+
+
+def date_ends(lines, date_to_find):
+    "Returns last line out of liens, with date_to_find"
+    return find_date_line(lines, date_to_find, reverse=True)
