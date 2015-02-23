@@ -67,6 +67,7 @@ def log(message):
 
     log_entry = get_log_entry(message)
     file.write(log_entry)
+    file.close()
 
     # echo back full log entry, without the new line char at the end
     click.echo(message=log_entry[:-1])
