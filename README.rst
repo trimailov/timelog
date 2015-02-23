@@ -6,7 +6,7 @@ CLI app for time logging
 Usage
 -----
 
-Go to `timeflow` directory and install it.
+Go to :code:`timeflow` directory and install it.
 
 .. code:: python
 
@@ -18,7 +18,7 @@ To log your work events:
 
     timeflow log 'My work'
 
-In `~/.timeflow` log message will be added.
+In :code:`~/.timeflow` log message will be added.
 
 To edit your log file
 
