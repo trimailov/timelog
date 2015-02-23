@@ -83,6 +83,7 @@ def edit(editor):
 
 
 def find_date_line(lines, date_to_find, reverse=False):
+    "Returns line index of lines, with date_to_find"
     len_lines = len(lines) - 1
     if reverse:
         lines = reversed(lines)
@@ -103,3 +104,12 @@ def date_begins(lines, date_to_find):
 def date_ends(lines, date_to_find):
     "Returns last line out of liens, with date_to_find"
     return find_date_line(lines, date_to_find, reverse=True)
+
+
+def is_slack(line):
+    "Returns if current log line is slack"
+    # slack entries end with '**' and can also have linefeed char
+    line = line.replace(' ', '').replace('\n', '')
+    if line[-2:] == "**":
+        return True
+    return False
