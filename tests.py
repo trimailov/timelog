@@ -54,6 +54,31 @@ class TestTimeflowHelpers(unittest.TestCase):
         line = timeflow.date_ends(lines, date_to_find)
         self.assertEqual(line, 4)
 
+    def test_is_slack(self):
+        non_slack_entry = '2015-01-01 12:00 Timeflow: testing'
+        self.assertFalse(timeflow.is_slack(non_slack_entry))
+
+        non_slack_entry_lf = '2015-01-01 12:00 Timeflow: testing\n'
+        self.assertFalse(timeflow.is_slack(non_slack_entry_lf))
+
+        slack_entry = '2015-01-01 12:00 Slack: testing**'
+        self.assertTrue(timeflow.is_slack(slack_entry))
+
+        slack_entry2 = '2015-01-01 12:00 Slack: testing**   '
+        self.assertTrue(timeflow.is_slack(slack_entry2))
+
+        slack_entry3 = '2015-01-01 12:00 Slack: testing  **   '
+        self.assertTrue(timeflow.is_slack(slack_entry3))
+
+        slack_entry_lf = '2015-01-01 12:00 Slack: testing**\n'
+        self.assertTrue(timeflow.is_slack(slack_entry_lf))
+
+        slack_entry_lf2 = '2015-01-01 12:00 Slack: testing**     \n'
+        self.assertTrue(timeflow.is_slack(slack_entry_lf2))
+
+        slack_entry_lf3 = '2015-01-01 12:00 Slack: testing   **     \n'
+        self.assertTrue(timeflow.is_slack(slack_entry_lf3))
+
 
 if __name__ == "__main__":
     unittest.main()
