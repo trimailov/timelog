@@ -46,6 +46,14 @@ def get_date_now():
     return time.strftime(DATE_FORMAT)
 
 
+def get_datetime_obj(string):
+    return datetime.strptime(string, DATETIME_FORMAT)
+
+
+def get_date_obj(string):
+    return datetime.strptime(string, DATE_FORMAT)
+
+
 def get_log_entry(message):
     time = get_datetime_now()
     string = ': '.join((time, message))
