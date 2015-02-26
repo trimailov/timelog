@@ -6,7 +6,8 @@ import click
 
 
 LOG_FILE = os.path.expanduser('~') + "/.timeflow"
-DATE_FORMAT = "%Y-%m-%d %H:%M"
+DATETIME_FORMAT = "%Y-%m-%d %H:%M"
+DATE_FORMAT = "%Y-%m-%d"
 
 # Constants for stripping log entry strings to get date or datetime strings
 DATE_LEN = 10
@@ -35,13 +36,18 @@ def is_another_day(date):
         return False
 
 
-def get_time_now():
+def get_datetime_now():
+    time = datetime.now()
+    return time.strftime(DATETIME_FORMAT)
+
+
+def get_date_now():
     time = datetime.now()
     return time.strftime(DATE_FORMAT)
 
 
 def get_log_entry(message):
-    time = get_time_now()
+    time = get_datetime_now()
     string = ': '.join((time, message))
 
     another_day = is_another_day(time)
