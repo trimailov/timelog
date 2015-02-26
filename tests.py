@@ -16,7 +16,7 @@ class TestCommands(unittest.TestCase):
         timeflow.LOG_FILE = self.test_file
 
         message = 'Arrived.'
-        time = timeflow.get_time_now()
+        time = timeflow.get_datetime_now()
 
         runner = CliRunner()
         result = runner.invoke(timeflow.log, [message])
