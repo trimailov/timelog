@@ -127,3 +127,10 @@ def is_slack(line):
     if line[-2:] == "**":
         return True
     return False
+
+
+def get_lines():
+    file = open(LOG_FILE, 'r')
+    lines = file.readlines()
+    file.close()
+    return lines
