@@ -1,4 +1,5 @@
 from datetime import datetime
+from datetime import timedelta
 import os
 import subprocess
 
@@ -11,7 +12,7 @@ DATE_FORMAT = "%Y-%m-%d"
 
 # Constants for stripping log entry strings to get date or datetime strings
 DATE_LEN = 10
-DATE_TIME_LEN = 16
+DATETIME_LEN = 16
 
 
 def is_another_day(date):
@@ -134,3 +135,36 @@ def get_lines():
     lines = file.readlines()
     file.close()
     return lines
+
+
+@cli.command()
+def stats():
+    "Prints work time statistics"
+    lines = get_lines()
+
+    date = get_date_now()
+    line_begins = date_begins(lines, date)
+    line_ends = date_ends(lines, date)
+
+    work_time = []
+    slack_time = []
+
+    for i, line in enumerate(lines[line_begins:line_ends+1]):
+        # if we got to the last line - stop
+        if line_begins+i+1 > line_ends:
+            break
+
+        next_line = lines[line_begins+i+1]
+
+        line_time = get_datetime_obj(line[:DATETIME_LEN])
+        next_line_time = get_datetime_obj(next_line[:DATETIME_LEN])
+
+        timedelta = (next_line_time - line_time).seconds
+
+        if is_slack(next_line):
+            slack_time.append(timedelta)
+        else:
+            work_time.append(timedelta)
+
+    click.echo('Total work time: %i' % sum(work_time))
+    click.echo('Total slack time: %i' % sum(slack_time))
