@@ -166,5 +166,13 @@ def stats():
         else:
             work_time.append(timedelta)
 
-    click.echo('Total work time: %i' % sum(work_time))
-    click.echo('Total slack time: %i' % sum(slack_time))
+    work_seconds = sum(work_time)
+    work_hours = work_seconds // 3600
+    work_minutes = work_seconds % 3600 // 60
+
+    slack_seconds = sum(slack_time)
+    slack_hours = slack_seconds // 3600
+    slack_minutes = slack_seconds % 3600 // 60
+
+    click.echo('Work: {:02}h {:02}min'.format(work_hours, work_minutes))
+    click.echo('Slack: {:02}h {:02}min'.format(slack_hours, slack_minutes))
