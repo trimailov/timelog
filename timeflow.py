@@ -117,7 +117,7 @@ def date_begins(lines, date_to_find):
 
 
 def date_ends(lines, date_to_find):
-    "Returns last line out of liens, with date_to_find"
+    "Returns last line out of lines, with date_to_find"
     return find_date_line(lines, date_to_find, reverse=True)
 
 
