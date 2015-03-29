@@ -94,7 +94,22 @@ def log(message):
               help='Define editor for timeflow log file editing.')
 def edit(editor):
     """Edit timeflow log file"""
-    subprocess.call([editor, LOG_FILE])
+    if editor:
+        subprocess.call([editor, LOG_FILE])
+    else:
+        try:
+            click.echo("EDITOR environment variable is not set.")
+            click.echo("Opening ~/.timeflow with default editor.")
+            click.echo("Set EDITOR environment variable, to use preffered editor.")
+            open = ['open', LOG_FILE]
+            xdg_open = ['xdg-open', LOG_FILE]
+            subprocess.call(open) or subprocess.call(xdg_open)
+        except:
+            click.echo("Default editor not found.")
+            click.echo("Set your EDITOR environment variable.")
+            click.echo("Add to your .bash_profile, .bashrc, .zshrc or other:")
+            click.echo("EDITOR = 'vim'")
+
 
 
 def find_date_line(lines, date_to_find, reverse=False):
