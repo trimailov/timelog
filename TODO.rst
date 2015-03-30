@@ -16,3 +16,4 @@ Options:
     * :code:`--last-month, -lm` - last month's statistics
     * :code:`--from, -f YEAR-MONTH-DAY` - date from
     * :code:`--to, -t YEAR-MONTH-DAY` - date to (empty defaults to today)
+    * :code:`--day, -d YEAR-MONTH-DAY` - custom day
