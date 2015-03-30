@@ -155,7 +155,8 @@ def is_arrived(line):
 
 def get_lines():
     file = open(LOG_FILE, 'r')
-    lines = file.readlines()
+    # exclude empty lines from timeflow file
+    lines = [line for line in file.readlines() if line != '\n']
     file.close()
     return lines
 
