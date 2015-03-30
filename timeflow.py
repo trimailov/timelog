@@ -161,14 +161,16 @@ def get_lines():
     return lines
 
 
-@cli.command()
-def stats():
-    "Prints work time statistics"
-    lines = get_lines()
+def get_time(seconds):
+    hours = seconds // 3600
+    minutes = seconds % 3600 // 60
+    return hours, minutes
 
-    date = get_date_now()
-    line_begins = date_begins(lines, date)
-    line_ends = date_ends(lines, date)
+
+def calculate_stats(date_from, date_to):
+    lines = get_lines()
+    line_begins = date_begins(lines, date_from)
+    line_ends = date_ends(lines, date_to)
 
     work_time = []
     slack_time = []
@@ -181,22 +183,23 @@ def stats():
         next_line = lines[line_begins+i+1]
 
         line_time = get_datetime_obj(line[:DATETIME_LEN])
-        next_line_time = get_datetime_obj(next_line[:DATETIME_LEN])
-
-        timedelta = (next_line_time - line_time).seconds
+        if is_arrived(next_line):
+            timedelta = 0
+        else:
+            next_line_time = get_datetime_obj(next_line[:DATETIME_LEN])
+            timedelta = (next_line_time - line_time).seconds
 
         if is_slack(next_line):
             slack_time.append(timedelta)
         else:
             work_time.append(timedelta)
 
-    work_seconds = sum(work_time)
-    work_hours = work_seconds // 3600
-    work_minutes = work_seconds % 3600 // 60
+    return work_time, slack_time
 
-    slack_seconds = sum(slack_time)
-    slack_hours = slack_seconds // 3600
-    slack_minutes = slack_seconds % 3600 // 60
+
+def print_stats(work_time, slack_time):
+    work_hours, work_minutes = get_time(sum(work_time))
+    slack_hours, slack_minutes = get_time(sum(slack_time))
 
     click.echo('Work: {:02}h {:02}min'.format(work_hours, work_minutes))
     click.echo('Slack: {:02}h {:02}min'.format(slack_hours, slack_minutes))
