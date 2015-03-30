@@ -203,3 +203,49 @@ def print_stats(work_time, slack_time):
 
     click.echo('Work: {:02}h {:02}min'.format(work_hours, work_minutes))
     click.echo('Slack: {:02}h {:02}min'.format(slack_hours, slack_minutes))
+
+
+@cli.command()
+@click.option('--today', 'today', is_flag=True)
+@click.option('--yesterday', '-y', 'yesterday', is_flag=True)
+@click.option('--week', 'week')
+@click.option('--last-week', 'last_week', is_flag=True)
+@click.option('--month', 'month')
+@click.option('--last-month', 'last_month', is_flag=True)
+@click.option('--from', '-f', '_from')
+@click.option('--to', '-t', 'to')
+@click.option('--day', '-d', 'day')
+def stats(today, yesterday, week, last_week, month, last_month, _from, to, day):
+    "Prints work time statistics"
+    date_from = date_to = None
+    args = [today, yesterday, week, last_week, month, last_month, _from, to, day]
+    if not any(args):
+        # if no options are passed, default to today
+        today = True
+
+    if today:
+        date_from = date_to = get_date_now()
+    elif yesterday:
+        yesterday_obj = datetime.now() - timedelta(days=1)
+        yesterday = yesterday_obj.strftime(DATE_FORMAT)
+        date_from = date_to = yesterday
+    elif last_week:
+        week_ago = datetime.now() - timedelta(weeks=1)
+        last_monday = week_ago - timedelta(days=week_ago.isocalendar()[2]-1)
+        last_sunday = week_ago + timedelta(days=5+(week_ago.isocalendar()[2]))
+
+        date_from = last_monday.strftime(DATE_FORMAT)
+        date_to = last_sunday.strftime(DATE_FORMAT)
+    # if no 'to' date is passed, default 'to' to today
+    elif _from and not to:
+        date_from = _from
+        date_to = get_date_now()
+    elif _from and to:
+        date_from = _from
+        date_to = to
+    elif day:
+        date_from = date_to = day
+
+    work_time, slack_time = calculate_stats(date_from, date_to)
+
+    print_stats(work_time, slack_time)
