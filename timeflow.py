@@ -145,6 +145,14 @@ def is_slack(line):
     return False
 
 
+def is_arrived(line):
+    "Returns if log line marks beggining of the day"
+    line = line.replace(' ', '').replace('\n', '').replace('.', '')
+    if line[DATETIME_LEN:].lower() == 'arrived':
+        return True
+    return False
+
+
 def get_lines():
     file = open(LOG_FILE, 'r')
     lines = file.readlines()
