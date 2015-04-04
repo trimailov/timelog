@@ -12,6 +12,8 @@ coverage:
 	env/bin/coverage run --omit='env/*' tests.py
 	coverage report -m
 	coverage html
+	@echo "Now you can use:"
+	@echo "open htmlcov/index.html"
 
 show_coverage:
 	open htmlcov/index.html
