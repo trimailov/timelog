@@ -118,12 +118,13 @@ def find_date_line(lines, date_to_find, reverse=False):
     if reverse:
         lines = reversed(lines)
     for i, line in enumerate(lines):
-        date = line[:DATE_LEN]
-        if date == date_to_find:
-            if reverse:
-                return len_lines - i
-            else:
-                return i
+        date_obj = get_date_obj(line[:DATE_LEN])
+        date_to_find_obj = get_date_obj(date_to_find)
+
+        if reverse and date_obj <= date_to_find_obj:
+            return len_lines - i
+        elif date_obj >= date_to_find_obj:
+            return i
 
 
 def date_begins(lines, date_to_find):
@@ -167,13 +168,16 @@ def get_time(seconds):
     return hours, minutes
 
 
-def calculate_stats(date_from, date_to):
-    lines = get_lines()
+def calculate_stats(lines, date_from, date_to):
+    work_time = []
+    slack_time = []
+
     line_begins = date_begins(lines, date_from)
     line_ends = date_ends(lines, date_to)
 
-    work_time = []
-    slack_time = []
+    date_not_found = line_ends < line_begins
+    if date_not_found:
+        return work_time, slack_time
 
     for i, line in enumerate(lines[line_begins:line_ends+1]):
         # if we got to the last line - stop
@@ -246,6 +250,6 @@ def stats(today, yesterday, week, last_week, month, last_month, _from, to, day):
     elif day:
         date_from = date_to = day
 
-    work_time, slack_time = calculate_stats(date_from, date_to)
+    work_time, slack_time = calculate_stats(get_lines(), date_from, date_to)
 
     print_stats(work_time, slack_time)
