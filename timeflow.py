@@ -188,7 +188,8 @@ def calculate_stats(lines, date_from, date_to):
 
         line_time = get_datetime_obj(line[:DATETIME_LEN])
         if is_arrived(next_line):
-            timedelta = 0
+            continue
+
         else:
             next_line_time = get_datetime_obj(next_line[:DATETIME_LEN])
             timedelta = (next_line_time - line_time).seconds
