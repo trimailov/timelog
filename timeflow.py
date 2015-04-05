@@ -123,7 +123,7 @@ def find_date_line(lines, date_to_find, reverse=False):
 
         if reverse and date_obj <= date_to_find_obj:
             return len_lines - i
-        elif date_obj >= date_to_find_obj:
+        elif not reverse and date_obj >= date_to_find_obj:
             return i
 
 
@@ -175,7 +175,7 @@ def calculate_stats(lines, date_from, date_to):
     line_begins = date_begins(lines, date_from)
     line_ends = date_ends(lines, date_to)
 
-    date_not_found = line_ends < line_begins
+    date_not_found = (line_begins == None or line_ends < line_begins)
     if date_not_found:
         return work_time, slack_time
 
