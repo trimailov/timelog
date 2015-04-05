@@ -226,6 +226,34 @@ def get_last_week():
     return date_from, date_to
 
 
+def get_last_month():
+    month = datetime.now().month - 1
+    if month == 12:
+        return get_month(month, year=datetime.now().year-1)
+    return get_month(month)
+
+
+def get_month(month, year=datetime.now().year):
+    month = int(month)
+    days_in_month = {
+        1: 31,
+        2: 28,
+        3: 31,
+        4: 30,
+        5: 31,
+        6: 30,
+        7: 31,
+        8: 31,
+        9: 30,
+        10: 31,
+        11: 30,
+        12: 31,
+    }
+    date_from = '{}-{:02}-01'.format(year, month)
+    date_to = '{}-{:02}-{:02}'.format(year, month, days_in_month[month])
+    return date_from, date_to
+
+
 @cli.command()
 @click.option('--today', 'today', is_flag=True)
 @click.option('--yesterday', '-y', 'yesterday', is_flag=True)
@@ -250,6 +278,10 @@ def stats(today, yesterday, week, last_week, month, last_month, _from, to, day):
         date_from = date_to = get_yesterday()
     elif last_week:
         date_from, date_to = get_last_week()
+    elif month:
+        date_from, date_to = get_month(month)
+    elif last_month:
+        date_from, date_to = get_last_month()
     # if no 'to' date is passed, default 'to' to today
     elif _from and not to:
         date_from = _from
