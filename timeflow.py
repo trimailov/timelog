@@ -237,7 +237,7 @@ def stats(today, yesterday, week, last_week, month, last_month, _from, to, day):
     elif last_week:
         week_ago = datetime.now() - timedelta(weeks=1)
         last_monday = week_ago - timedelta(days=week_ago.isocalendar()[2]-1)
-        last_sunday = week_ago + timedelta(days=5+(week_ago.isocalendar()[2]))
+        last_sunday = last_monday + timedelta(days=6)
 
         date_from = last_monday.strftime(DATE_FORMAT)
         date_to = last_sunday.strftime(DATE_FORMAT)
