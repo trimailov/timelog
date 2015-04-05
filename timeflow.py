@@ -210,6 +210,22 @@ def print_stats(work_time, slack_time):
     click.echo('Slack: {:02}h {:02}min'.format(slack_hours, slack_minutes))
 
 
+def get_yesterday():
+    yesterday_obj = datetime.now() - timedelta(days=1)
+    yesterday = yesterday_obj.strftime(DATE_FORMAT)
+    return yesterday
+
+
+def get_last_week():
+    week_ago = datetime.now() - timedelta(weeks=1)
+    last_monday = week_ago - timedelta(days=week_ago.isocalendar()[2]-1)
+    last_sunday = last_monday + timedelta(days=6)
+
+    date_from = last_monday.strftime(DATE_FORMAT)
+    date_to = last_sunday.strftime(DATE_FORMAT)
+    return date_from, date_to
+
+
 @cli.command()
 @click.option('--today', 'today', is_flag=True)
 @click.option('--yesterday', '-y', 'yesterday', is_flag=True)
@@ -231,16 +247,9 @@ def stats(today, yesterday, week, last_week, month, last_month, _from, to, day):
     if today:
         date_from = date_to = get_date_now()
     elif yesterday:
-        yesterday_obj = datetime.now() - timedelta(days=1)
-        yesterday = yesterday_obj.strftime(DATE_FORMAT)
-        date_from = date_to = yesterday
+        date_from = date_to = get_yesterday()
     elif last_week:
-        week_ago = datetime.now() - timedelta(weeks=1)
-        last_monday = week_ago - timedelta(days=week_ago.isocalendar()[2]-1)
-        last_sunday = last_monday + timedelta(days=6)
-
-        date_from = last_monday.strftime(DATE_FORMAT)
-        date_to = last_sunday.strftime(DATE_FORMAT)
+        date_from, date_to = get_last_week()
     # if no 'to' date is passed, default 'to' to today
     elif _from and not to:
         date_from = _from
