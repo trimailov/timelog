@@ -9,7 +9,7 @@ test:
 
 coverage:
 	rm -rf htmlcov/ .coverage
-	env/bin/coverage run --omit='env/*' tests.py
+	env/bin/coverage run --branch --omit='env/*' tests.py
 	coverage report -m
 	coverage html
 	@echo "Now you can use:"
